@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Тюремные шахматы</title>
+  <style>
+    body { font-family: sans-serif; background: #222; color: #eee; text-align: center; }
+    #board { display: grid; grid-template-columns: repeat(8, 60px); width: 480px; margin: 20px auto; }
+    .square { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    .light { background: #f0d9b5; color: black; }
+    .dark { background: #b58863; color: black; }
+    .selected { outline: 3px solid #ff0; box-shadow: inset 0 0 10px rgba(255,255,0,0.7); }
+    .move-hint { background-image: radial-gradient(circle, rgba(0,255,0,0.6) 25%, rgba(0,0,0,0) 26%); }
+    .last-move { background-color: rgba(255,255,0,0.3) !important; }
+    .animate-move { transition: background-color 0.25s ease; }
+    #status { margin-top: 10px; }
+    #question { margin: 20px auto; padding: 10px; border: 2px solid #eee; max-width: 480px; }
+    #question .timer { font-weight: bold; color: #ffcc00; }
+    button { padding: 8px 12px; margin: 5px; }
+    #leaderboard { max-width: 480px; margin: 20px auto; text-align: left; }
+    #leaderboard table { width: 100%; border-collapse: collapse; }
+    #leaderboard th, #leaderboard td { border-bottom: 1px solid #444; padding: 6px 8px; }
+  </style>
+</head>
+<body>
+  <h1>Тюремные шахматы</h1>
+  <div id="login">
+    <input id="name" placeholder="Ваше имя">
+    <button id="startQuick">Быстрая игра</button>
+  </div>
+  <div id="game" style="display:none;">
+    <div id="board"></div>
+    <div id="status"></div>
+    <div id="clocks"></div>
+    <div id="question" style="display:none;"></div>
+    <button id="resign">Сдаться</button>
+    <div id="leaderboard"></div>
+  </div>
+<script src="client.js"></script>
+</body>
+</html>
+
