@@ -718,6 +718,8 @@ function tickGame(gameId) {
       g.pendingQuestion = null;
       scheduleNextQuestion(g);
       broadcast(g, 'question_result', { correct: false, penaltyMs: QUESTION_PENALTY_WRONG_MS });
+      // время поменялось — отправим состояние
+      broadcast(g, 'state', serializeStateForClients(g));
     }
   } else {
     // Schedule question if time
@@ -967,6 +969,8 @@ wss.on('connection', (ws) => {
 
       sendTo(clientId, 'question_result', { correct, penaltyMs: correct ? QUESTION_PENALTY_CORRECT_MS : QUESTION_PENALTY_WRONG_MS });
       sendTo(opponentClientId(g, clientId), 'peer_question_result', { correctPeer: correct });
+      // время поменялось — отправим состояние
+      broadcast(g, 'state', serializeStateForClients(g));
       return;
     }
   });

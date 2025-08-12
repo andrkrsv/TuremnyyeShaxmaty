@@ -4,6 +4,7 @@ let selectedSquare = null;
 let boardState = [];
 let gameStarted = false;
 let timeWhite = 0, timeBlack = 0;
+let lastSyncAt = 0;
 let turn = 'w';
 let lastMove = null;
 let legalFromMoves = new Map(); // fromIdx -> Set(toIdx)
@@ -125,6 +126,7 @@ document.getElementById('startQuick').onclick = () => {
       turn = data.turn;
       timeWhite = data.time.w;
       timeBlack = data.time.b;
+      lastSyncAt = performance.now();
       lastMove = data.lastMove || null;
       drawBoard();
       // время обновится в анимационном цикле
@@ -168,15 +170,22 @@ setInterval(() => {
 
 function startTimerLoop() {
   function loop() {
-    renderClocks();
+    // интерполируем таймер той стороны, чей ход сейчас
+    const nowTs = performance.now();
+    const dt = nowTs - lastSyncAt;
+    const w = turn === 'w' ? Math.max(0, timeWhite - dt) : timeWhite;
+    const b = turn === 'b' ? Math.max(0, timeBlack - dt) : timeBlack;
+    renderClocks(w, b);
     rafTimerId = requestAnimationFrame(loop);
   }
   if (rafTimerId) cancelAnimationFrame(rafTimerId);
   rafTimerId = requestAnimationFrame(loop);
 }
 
-function renderClocks() {
-  document.getElementById('clocks').textContent = `Белые: ${(timeWhite/1000).toFixed(1)}с — Чёрные: ${(timeBlack/1000).toFixed(1)}с`;
+function renderClocks(wOverride, bOverride) {
+  const w = typeof wOverride === 'number' ? wOverride : timeWhite;
+  const b = typeof bOverride === 'number' ? bOverride : timeBlack;
+  document.getElementById('clocks').textContent = `Белые: ${(w/1000).toFixed(1)}с — Чёрные: ${(b/1000).toFixed(1)}с`;
 }
 
 document.getElementById('resign').onclick = () => {
