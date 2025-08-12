@@ -1,0 +1,3 @@
+GPT-6 READY CHESS
+
+CURSOR ONLY🔞✅
